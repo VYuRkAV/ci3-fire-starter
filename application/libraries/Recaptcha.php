@@ -33,7 +33,8 @@ class Recaptcha
         $this->_ci = & get_instance();
         $this->_ci->load->config('recaptcha');
 
-        if (!$this->_ci->config->item('recaptcha_site_key') or !$this->_ci->config->item('recaptcha_secret_key')) {
+        if (!$this->_ci->config->item('recaptcha_site_key') or !$this->_ci->config->item('recaptcha_secret_key')) 
+		{
             die("To use reCAPTCHA you must get an API key from <a href='"
                 .self::sign_up_url."'>".self::sign_up_url."</a>");
         }
@@ -68,7 +69,8 @@ class Recaptcha
         $remoteIp = (!empty($remoteIp)) ? $remoteIp : $this->_ci->input->ip_address();
 
         // Discard empty solution submissions
-        if (empty($response)) {
+        if (empty($response))
+        {
             return array(
                 'success' => false,
                 'error-codes' => 'missing-input',
@@ -86,9 +88,12 @@ class Recaptcha
         // get reCAPTCHA server response
         $responses = json_decode($getResponse, true);
 
-        if (isset($responses['success']) and $responses['success'] == true) {
+        if (isset($responses['success']) and $responses['success'] == true)
+        {
             $status = true;
-        } else {
+        }
+        else
+        {
             $status = false;
             $error = (isset($responses['error-codes'])) ? $responses['error-codes']
                 : 'invalid-input-response';
@@ -146,7 +151,8 @@ class Recaptcha
         $result = array_replace($default, $parameters);
 
         $html = '';
-        foreach ($result as $key => $value) {
+        foreach ($result as $key => $value)
+        {
             $html .= ' '.$key.'="'.$value.'"';
         }
 
