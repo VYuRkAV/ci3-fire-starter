@@ -16,6 +16,7 @@ $lang['admin button settings']            = "Settings";
 $lang['admin button users']               = "Users";
 $lang['admin button users_add']           = "Add New User";
 $lang['admin button users_list']          = "List Users";
+$lang['admin button pages']               = "Pages";
 
 // Tooltips
 $lang['admin tooltip csv_export']         = "Export a CSV file of all results with filters applied.";

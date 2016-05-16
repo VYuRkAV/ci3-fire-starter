@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Contact extends Admin_Controller {
+class Contact extends Editor_Controller {
 
     /**
      * @var string
@@ -251,6 +251,33 @@ class Contact extends Admin_Controller {
 
         display_json($results);
         exit;
+    }
+	
+	/**
+     * Delete a message
+     *
+     * @param  int $id
+     */
+    function delete($id = NULL)
+    {
+        // make sure we have a numeric id
+        if ( ! is_null($id) OR ! is_numeric($id))
+        {
+			// soft-delete the user
+			$delete = $this->contact_model->delete_message($id);
+
+			if ($delete)
+			{
+				$this->session->set_flashdata('message', lang('contact msg delete_message'));
+			}
+			else
+			{
+				$this->session->set_flashdata('error', lang('contact error delete_message'));
+			}
+		}
+
+        // return to list and display message
+        redirect($this->_redirect_url);
     }
 
 }

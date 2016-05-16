@@ -28,8 +28,10 @@ $lang['contact input created']          = "Получено";
 // Messages
 $lang['contact msg send_success']       = "%s, спасибо что связались с нами! Ваше сообщение было отправлено.";
 $lang['contact msg updated']            = "Сообщение обновлено!";
+$lang['contact msg delete_message']     = "Сообщение удалено!";
 
 // Errors
 $lang['contact error captcha']          = "Текст с картинки неправильно введён.";
 $lang['contact error send_failed']      = "Извените, %s. Возникла проблема при отправке вашего сообщения. Пожалуйста, попробуйте снова.";
 $lang['contact error update_failed']    = "Не получилось обновить статус.";
+$lang['contact error delete_message']   = "Не удалось удалить.";

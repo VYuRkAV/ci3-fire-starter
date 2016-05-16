@@ -10,7 +10,6 @@ class MY_Controller extends CI_Controller {
      */
     public $user;
     public $settings;
-    public $languages;
     public $includes;
     public $current_uri;
     public $theme;
@@ -24,16 +23,86 @@ class MY_Controller extends CI_Controller {
     function __construct()
     {
         parent::__construct();
+		
+		//If settings redirect always ssl - set config core
+		if ($this->config->item('redirect_ssl')) 
+		{
+			$url = "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+			
+			if (array_key_exists('HTTPS', $_SERVER)) 
+			{
+				if ($_SERVER['HTTPS'] != "on") 
+				{
+					redirect($url);
+				}
+			}
+			elseif (array_key_exists('HTTP_X_FORWARDED_PROTO', $_SERVER))
+			{
+				if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "http") 
+				{
+					redirect($url);
+				}
+			} 
+			else 
+			{
+				redirect($url);
+			}
+		}
+		
+        // load the core language file
+        $this->lang->load('core');
+		
+		// Set html lang
+		$this->includes[ 'html_lang' ] = substr($this->session->language, 0, 2);
+		
+		// set global header data - can be merged with or overwritten in controllers
+        $this
+            ->add_external_css(
+                array(
+				    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous',
+                    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous',
+                    '/themes/core/css/core.css'
+                ))
+            ->add_external_js(
+                array(
+                    'https://code.jquery.com/jquery-1.12.3.min.js',
+                    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous'
+                ));
+				
+		$this->includes[ 'js_files_i18n' ] = array(
+            $this->jsi18n->translate("/themes/core/js/core_i18n.js")
+        );
 
-        // get settings
-        $settings = $this->settings_model->get_settings();
-        $this->settings = new stdClass();
-        foreach ($settings as $setting)
-        {
-            $this->settings->{$setting['name']} = (@unserialize($setting['value']) !== FALSE) ? unserialize($setting['value']) : $setting['value'];
-        }
-        $this->settings->site_version = $this->config->item('site_version');
-        $this->settings->root_folder  = $this->config->item('root_folder');
+        // Set or caching settings
+		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+		
+		if ( ! $this->settings = $this->cache->get('settings'))
+		{
+			// get settings
+			$settings = $this->settings_model->get_settings();
+			$this->settings = new stdClass();
+			foreach ($settings as $setting)
+			{
+				$this->settings->{$setting['name']} = (@unserialize($setting['value']) !== FALSE) ? unserialize($setting['value']) : $setting['value'];			
+			}
+			$this->settings->site_version = $this->config->item('site_version');
+			$this->settings->root_folder  = $this->config->item('root_folder');
+			
+			// get languages
+			$languages = $this->lang->get_lang_list();
+			foreach ($languages as $language)
+			{
+				$this->settings->idioms[$language] = lang($language);
+			}
+			
+			$this->cache->save('settings', $this->settings, 2592000);
+		}
+		
+		// if not required Page Title (Set Default Site Name)
+		$this->includes[ 'page_title' ] = $this->settings->site_name;
+		
+		// set arbitrary text
+		$this->includes[ 'html_footer' ] = $this->settings->html_footer.PHP_EOL;
 
         // get current uri
         $this->current_uri = "/" . uri_string();
@@ -44,54 +113,6 @@ class MY_Controller extends CI_Controller {
 
         // get current user
         $this->user = $this->session->userdata('logged_in');
-
-        // get languages
-        $this->languages = get_languages();
-
-        // set language according to this priority:
-        //   1) First, check session
-        //   2) If session not set, use the users language
-        //   3) Finally, if no user, use the configured languauge
-        if ($this->session->language)
-        {
-            // language selected from nav
-            $this->config->set_item('language', $this->session->language);
-        }
-        elseif ($this->user['language'])
-        {
-            // user's saved language
-            $this->config->set_item('language', $this->user['language']);
-        }
-        else
-        {
-            // default language
-            $this->config->set_item('language', $this->config->item('language'));
-        }
-
-        // save selected language to session
-        $this->session->language = $this->config->item('language');
-
-        // load the core language file
-        $this->lang->load('core');
-
-        // set global header data - can be merged with or overwritten in controllers
-        $this
-            ->add_external_css(
-                array(
-                    "//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css",
-                    "//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css",
-                    "//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css",
-                    "/themes/core/css/core.css"
-                ))
-            ->add_external_js(
-                array(
-                    "//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
-                    "//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"
-                ));
-
-        $this->includes[ 'js_files_i18n' ] = array(
-            $this->jsi18n->translate("/themes/core/js/core_i18n.js")
-        );
 
         // enable the profiler?
         $this->output->enable_profiler($this->config->item('profiler'));
@@ -126,6 +147,7 @@ class MY_Controller extends CI_Controller {
      * @access  public
      * @param   mixed
      * @param string, default = NULL
+	 * @param string, default = NULL
      * @return  chained object
      */
     function add_external_css($css_files, $path = NULL)
@@ -379,7 +401,7 @@ class MY_Controller extends CI_Controller {
      */
     function set_title( $page_title )
     {
-        $this->includes[ 'page_title' ] = $page_title;
+        $this->includes[ 'page_title' ] = $page_title.' - '.$this->settings->site_name;
 
         /* check wether page_header has been set or has a value
         * if not, then set page_title as page_header
@@ -404,6 +426,51 @@ class MY_Controller extends CI_Controller {
         $this->includes[ 'page_header' ] = $page_header;
         return $this;
     }
+	
+	
+	/* Set Page html string into the <footer> tag
+     * sometime, we want to have insert some text in the <footer> tag
+	 * see example in Controller Contact - reCaptcha
+	 * so, use this function
+     * --------------------------------------
+     * @since   Version 0.0.1
+     * @access  public
+     * @param   string
+     * @return  chained object
+     */
+    function set_html_footer( $html_footer )
+    {
+        $this->includes[ 'html_footer' ] .= $html_footer.PHP_EOL;
+        return $this;
+    }
+	
+	
+    /* Add summernote files 
+     * 
+     * --------------------------------------
+     * @since   Version 0.0.1
+     * @access  public
+     * @return  chained object
+     */
+    function set_textarea()
+    {
+		if (empty($this->includes[ 'css_files' ][ 'summernote' ]))
+		{
+			$this->includes[ 'css_files' ][ 'summernote' ] = base_url( "/themes/core/css/summernote.css" );
+			$this->includes[ 'js_files' ][ 'summernote_run' ] = base_url( "/themes/core/js/summernote/summernote-run.js" );
+			$this->includes[ 'js_files' ][ 'summernote_min' ] = base_url( "/themes/core/js/summernote/summernote.min.js" );
+			$filenames = get_filenames( '../' . $this->config->item('root_folder') . '/themes/core/js/summernote/lang/');
+			
+			foreach ($filenames as $filename)
+			{
+				if (substr($filename, -12, 2) == substr($this->session->language, 0, 2))
+				{
+					$this->includes[ 'js_files' ][$filename] = base_url( "/themes/core/js/summernote/lang" ) . "/{$filename}";
+					$this->includes[ 'html_lang' ] = substr($filename, -12, 5);
+				}
+			}
+		}
+	}
 
 
     /* Set Template

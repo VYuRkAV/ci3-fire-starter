@@ -3,14 +3,14 @@
  * Admin Template
  */
 ?><!DOCTYPE html>
-<html>
+<html lang="<?php echo $html_lang ?>">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=<?php echo $this->settings->site_version; ?>">
 	<link rel="icon" type="image/x-icon" href="/favicon.ico?v=<?php echo $this->settings->site_version; ?>">
-    <title><?php echo $page_title; ?> - <?php echo $this->settings->site_name; ?></title>
+    <title><?php echo $page_title; ?></title>
 
     <?php // CSS files ?>
     <?php if (isset($css_files) && is_array($css_files)) : ?>
@@ -45,15 +45,18 @@
                 <?php // Nav bar left ?>
                 <ul class="nav navbar-nav">
                     <li class="<?php echo (uri_string() == 'admin' OR uri_string() == 'admin/dashboard') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin'); ?>"><?php echo lang('admin button dashboard'); ?></a></li>
-                    <li class="dropdown<?php echo (strstr(uri_string(), 'admin/users')) ? ' active' : ''; ?>">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo lang('admin button users'); ?> <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li class="<?php echo (uri_string() == 'admin/users') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin/users'); ?>"><?php echo lang('admin button users_list'); ?></a></li>
-                            <li class="<?php echo (uri_string() == 'admin/users/add') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin/users/add'); ?>"><?php echo lang('admin button users_add'); ?></a></li>
-                        </ul>
-                    </li>
                     <li class="<?php echo (uri_string() == 'admin/contact') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin/contact'); ?>"><?php echo lang('admin button messages'); ?></a></li>
-                    <li class="<?php echo (uri_string() == 'admin/settings') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin/settings'); ?>"><?php echo lang('admin button settings'); ?></a></li>
+                    <li class="<?php echo (uri_string() == 'admin/pages') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin/pages'); ?>"><?php echo lang('admin button pages'); ?></a></li>
+                    <?php if ($this->user['role'] == 'admin') : ?>
+                        <li class="dropdown<?php echo (strstr(uri_string(), 'admin/users')) ? ' active' : ''; ?>">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo lang('admin button users'); ?> <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="<?php echo (uri_string() == 'admin/users') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin/users'); ?>"><?php echo lang('admin button users_list'); ?></a></li>
+                                <li class="<?php echo (uri_string() == 'admin/users/add') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin/users/add'); ?>"><?php echo lang('admin button users_add'); ?></a></li>
+                            </ul>
+                        </li>
+                        <li class="<?php echo (uri_string() == 'admin/settings') ? 'active' : ''; ?>"><a href="<?php echo base_url('/admin/settings'); ?>"><?php echo lang('admin button settings'); ?></a></li>
+                    <?php endif; ?>
                 </ul>
                 <?php // Nav bar right ?>
                 <ul class="nav navbar-nav navbar-right">
@@ -61,17 +64,17 @@
                     <li>
                         <span class="dropdown">
                             <button id="session-language" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
-                                <i class="fa fa-language"></i>
+                                <span class="glyphicon glyphicon-globe"></span>
                                 <span class="caret"></span>
                             </button>
                             <ul id="session-language-dropdown" class="dropdown-menu" role="menu" aria-labelledby="session-language">
-                                <?php foreach ($this->languages as $key=>$name) : ?>
+                                <?php foreach ($this->settings->idioms as $language_key => $language_name) : ?>
                                     <li>
-                                        <a href="#" rel="<?php echo $key; ?>">
-                                            <?php if ($key == $this->session->language) : ?>
-                                                <i class="fa fa-check selected-session-language"></i>
+                                        <a href="#" rel="<?php echo $language_key; ?>">
+                                            <?php if ($language_key == $this->session->language) : ?>
+                                                <span class="glyphicon glyphicon-chevron-right selected-session-language"></span>
                                             <?php endif; ?>
-                                            <?php echo $name; ?>
+                                            <?php echo lang(substr($language_key, 0, 2)); ?>
                                         </a>
                                     </li>
                                 <?php endforeach; ?>
@@ -125,8 +128,9 @@
             <p class="text-muted">
                 <?php echo lang('core text page_rendered'); ?>
                 | CodeIgniter v<?php echo CI_VERSION; ?>
+                | <a href="http://jasonbaier.github.io/ci3-fire-starter/" target="_blank">CI3 Fire Starter</a>
                 | <?php echo $this->settings->site_name; ?> v<?php echo $this->settings->site_version; ?>
-                | <a href="http://jasonbaier.github.io/ci3-fire-starter/" target="_blank">Github.com</a>
+                | <a href="https://github.com/VYuRkAV/ci3-fire-starter" target="_blank">Github.com</a>
             </p>
         </div>
     </footer>

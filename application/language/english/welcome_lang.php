@@ -4,7 +4,7 @@
  */
 
 // Titles
-$lang['welcome title']                       = "Welcome to %s";
+$lang['welcome title']                       = "Welcome to";
 
 // Content
 $lang['welcome content view_location']       = "If you would like to edit this page you'll find the View located at:";
@@ -13,6 +13,7 @@ $lang['welcome content ci_docs']             = "If you are exploring CodeIgniter
 $lang['welcome content click_here']          = "CLICK HERE";
 $lang['welcome content sample_api']          = "view sample API output of users. This is for demo purposes only! Be sure to remove the users API before putting your site in a production environment.";
 $lang['welcome content sample_profile']      = "view a sample user profile.";
+$lang['welcome content sample_editor']       = "view the editor interface.";
 $lang['welcome content sample_admin']        = "view the admin interface.";
 $lang['welcome content username']            = "Username";
 $lang['welcome content or_email']            = "OR Email";

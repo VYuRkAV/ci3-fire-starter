@@ -28,8 +28,10 @@ $lang['contact input created']          = "Received";
 // Messages
 $lang['contact msg send_success']       = "Thanks for contacting us, %s! Your message has been sent.";
 $lang['contact msg updated']            = "Message updated!";
+$lang['contact msg delete_message']     = "Message deleted!";
 
 // Errors
 $lang['contact error captcha']          = "The CAPTCHA text did not match.";
 $lang['contact error send_failed']      = "Sorry, %s. There was a problem sending your message. Please try again.";
 $lang['contact error update_failed']    = "Could not update status.";
+$lang['contact error delete_message']   = "Could not delete.";

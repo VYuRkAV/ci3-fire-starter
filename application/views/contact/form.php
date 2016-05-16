@@ -40,11 +40,8 @@
 
     <div class="row">
         <?php  // captcha ?>
-        <div class="form-group col-sm-6<?php echo form_error('captcha') ? ' has-error' : ''; ?>">
-            <?php echo form_label(lang('contact input captcha'), 'captcha', array('class'=>'control-label')); ?>
-            <br />
-            <?php echo $captcha_image; ?>
-            <?php echo form_input(array('name'=>'captcha', 'id'=>'captcha', 'value'=>"", 'class'=>'form-control')); ?>
+        <div class="form-group col-sm-6<?php echo form_error('g-recaptcha-response') ? ' has-error' : ''; ?>">
+            <?php echo $widget;?>
         </div>
     </div>
 

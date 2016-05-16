@@ -19,69 +19,6 @@ class Contact_model extends CI_Model {
         $this->_db = 'emails';
     }
 
-
-    /**
-     * Save generated CAPTCHA to database
-     *
-     * @param  array $data
-     * @return boolean
-     */
-    public function save_captcha($data = array())
-    {
-        // CAPTCHA data required
-        if ($data)
-        {
-            // insert CAPTCHA
-            $query = $this->db->insert_string('captcha', $data);
-            $this->db->query($query);
-
-            // return
-            return TRUE;
-        }
-
-        return FALSE;
-    }
-
-
-    /**
-     * Verify CAPTCHA
-     *
-     * @param  string $captcha
-     * @return boolean
-     */
-    public function verify_captcha($captcha = NULL)
-    {
-        // CAPTCHA string required
-        if ($captcha)
-        {
-            // remove old CAPTCHA
-            $expiration = time() - 7200; // 2-hour limit
-            $this->db->query("DELETE FROM captcha WHERE captcha_time < {$expiration}");
-
-            // build query
-            $sql = "
-                SELECT
-                    COUNT(*) AS count
-                FROM captcha
-                WHERE word = " . $this->db->escape($captcha) . "
-                    AND ip_address = '" . $this->input->ip_address() . "'
-                    AND captcha_time > '{$expiration}'
-            ";
-
-            // execute query
-            $query = $this->db->query($sql);
-
-            // return results
-            if ($query->row()->count > 0)
-            {
-                return TRUE;
-            }
-        }
-
-        return FALSE;
-    }
-
-
     /**
      * Save and email contact message
      *
@@ -115,6 +52,7 @@ class Contact_model extends CI_Model {
                 try
                 {
                     // send email
+					$this->email->clear();
                     $this->email->from($data['email'], $data['name']);
                     $this->email->to($settings->site_email);
                     $this->email->subject($data['title']);
@@ -237,5 +175,33 @@ class Contact_model extends CI_Model {
 
         return FALSE;
     }
+	
+	/**
+     * Soft delete an existing mail
+     *
+     * @param  int $id
+     * @return boolean
+     */	 
+	function delete_message ($id = NULL)
+	{
+	    if ($id)
+	    {
+		    // build query string
+		    $sql = "
+			    DELETE FROM {$this->_db}
+                WHERE id = {$id}
+			";
+			
+			// execute query
+			$this->db->query($sql);
+			
+			// return results
+            if ($this->db->affected_rows())
+            {
+                return TRUE;
+            }
+	   }
+	   return FALSE;
+	}
 
 }

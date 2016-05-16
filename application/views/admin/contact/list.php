@@ -159,6 +159,7 @@
                         <p><?php echo $message['message']; ?></p>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-delete-message" data-id="<?php echo $message['id']; ?>"><?php echo lang('admin button delete'); ?></button>
                         <button type="button" class="btn btn-inverse" data-dismiss="modal"><?php echo lang('core button close'); ?></button>
                     </div>
                 </div>

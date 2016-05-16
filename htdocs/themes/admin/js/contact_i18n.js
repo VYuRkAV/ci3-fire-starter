@@ -21,5 +21,12 @@ $(document).ready(function() {
             });
         }
     });
+	
+	/**
+     * Delete a message
+     */
+    $('.btn-delete-message').click(function() {
+        window.location.href = "/admin/contact/delete/" + $(this).attr('data-id');
+    });
 
 });

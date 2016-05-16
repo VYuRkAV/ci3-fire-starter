@@ -26,7 +26,7 @@ class Admin_Controller extends MY_Controller {
         }
 
         // make sure this user is setup as admin
-        if ( ! $this->user['is_admin'])
+        if ($this->user['role'] != 'admin')
         {
             redirect(base_url());
         }
@@ -39,8 +39,7 @@ class Admin_Controller extends MY_Controller {
 
         // set up global header data
         $this
-            ->add_css_theme( "{$this->settings->theme}.css,summernote-bs3.css" )
-            ->add_js_theme( "summernote.min.js" )
+            ->add_css_theme( "{$this->settings->theme}.css" )
             ->add_js_theme( "{$this->settings->theme}_i18n.js", TRUE );
 
         // declare main template

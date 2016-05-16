@@ -1,11 +1,22 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+/**
+ * Mod language
+ *
+ * An open source application development framework for PHP
+ *
+ * This content is released under the MIT License (MIT)
+ *
+ */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Extended Language Class with fallback to English
+ * Language Class
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
  * @category	Language
+ * @author		YuRkA
+ * @link		https://codeigniter.com/user_guide/libraries/language.html
  */
 class MY_Lang extends CI_Lang {
 
@@ -22,6 +33,13 @@ class MY_Lang extends CI_Lang {
 	 * @var	array
 	 */
 	public $is_loaded =	array();
+	
+	/**
+	 * Loaded language
+	 *
+	 * @var	string
+	 */
+	public $idiom =	'';
 
 	/**
 	 * Class constructor
@@ -36,15 +54,16 @@ class MY_Lang extends CI_Lang {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Load a language file  - fallback to English if file is missing
+	 * Load a language file
 	 *
-	 * @param	mixed	$langfile	Language file name
-	 * @param	string	$idiom		Language name (english, etc.)
-	 * @param	bool	$return		Whether to return the loaded array of translations
-	 * @param 	bool	$add_suffix	Whether to add suffix to $langfile
-	 * @param 	string	$alt_path	Alternative path to look for the language file
+	 * @param	mixed	$langfile	       Language file name
+	 * @param	string	$idiom		       Language name (english, etc.)
+	 * @param	bool	$return		       Whether to return the loaded array of translations
+	 * @param 	bool	$add_suffix	       Whether to add suffix to $langfile
+	 * @param 	string	$alt_path	       Alternative path to look for the language file
 	 *
-	 * @return	void|string[]	Array containing translations, if $return is set to TRUE
+	 * @return	void|string[]	           Array containing translations, if $return is set to TRUE
+	 * @return  array   $this->idioms      Array languages names (english, etc.)
 	 */
 	public function load($langfile, $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
 	{
@@ -69,8 +88,46 @@ class MY_Lang extends CI_Lang {
 
 		if (empty($idiom) OR ! preg_match('/^[a-z_-]+$/i', $idiom))
 		{
-			$config =& get_config();
-			$idiom = empty($config['language']) ? 'english' : $config['language'];
+			// Set Session language
+			if (isset($_SESSION['language']))
+			{
+				$idiom = $_SESSION['language'];
+			}			
+			elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) 
+			{
+				// Get and set session the browser language
+				$list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+				
+				if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list)) 
+				{
+					$br_langs = array_combine($list[1], $list[2]);
+					
+					foreach ($br_langs as $k => $v)
+					{
+						$n = substr($k, -2);
+						$browser_langs[$v ? $v : 1] = $n;
+					}
+					unset($k, $v);
+					krsort($browser_langs, SORT_NUMERIC);
+					$langlist = $this->get_lang_list();
+					
+					foreach ($browser_langs as $browser_lang)
+					{
+						if (array_key_exists($browser_lang, $langlist))
+						{
+							$idiom = $langlist[$browser_lang];
+							$_SESSION['language'] = $idiom;
+							break;
+						}						
+					}
+				}
+			}
+			elseif (empty($idiom) OR ! preg_match('/^[a-z_-]+$/i', $idiom))
+			{
+				$config =& get_config();
+				$idiom = empty($config['language']) ? 'english' : $config['language'];
+				$_SESSION['language'] = $idiom;
+			}
 		}
 
 		if ($return === FALSE && isset($this->is_loaded[$langfile]) && $this->is_loaded[$langfile] === $idiom)
@@ -106,14 +163,6 @@ class MY_Lang extends CI_Lang {
 					$found = TRUE;
 					break;
 				}
-				// begin fallback to english
-				else
-				{
-					include(BASEPATH.'language/english/'.$langfile);
-					$found = TRUE;
-					break;
-				}
-				// end fallback to english
 			}
 		}
 
@@ -168,5 +217,32 @@ class MY_Lang extends CI_Lang {
 
 		return $value;
 	}
+	
+	// --------------------------------------------------------------------
+
+	/**
+	 * Get Language list
+	 *
+	 * Retrieves list of language folders
+	 *
+	 * @return array
+	 */
+	 public function get_lang_list()
+	 {
+		foreach (get_instance()->load->get_package_paths(TRUE) as $package_path)
+		{
+			$path_dir = glob($package_path . 'language/*', GLOB_ONLYDIR);
+			if (is_array($path_dir))
+			{
+				foreach ($path_dir as $value)
+				{
+					$language = basename($value);
+					$lang = substr($language, 0, 2);
+					$idioms[$lang] = $language;
+				}
+			}
+		}
+		return $idioms;
+	 }
 
 }

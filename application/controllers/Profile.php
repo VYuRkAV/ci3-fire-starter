@@ -72,7 +72,8 @@ class Profile extends Private_Controller {
         $content_data = array(
             'cancel_url'        => base_url(),
             'user'              => $this->user,
-            'password_required' => FALSE
+            'password_required' => FALSE,
+			'languages'         => $this->settings->idioms
         );
 
         // load views

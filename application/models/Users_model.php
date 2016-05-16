@@ -125,7 +125,7 @@ class Users_model extends CI_Model {
                     last_name,
                     email,
                     language,
-                    is_admin,
+                    role,
                     status,
                     deleted,
                     created,
@@ -138,7 +138,7 @@ class Users_model extends CI_Model {
                     " . $this->db->escape($data['last_name']) . ",
                     " . $this->db->escape($data['email']) . ",
                     " . $this->db->escape($this->config->item('language')) . ",
-                    " . $this->db->escape($data['is_admin']) . ",
+                    " . $this->db->escape($data['role']) . ",
                     " . $this->db->escape($data['status']) . ",
                     '0',
                     '" . date('Y-m-d H:i:s') . "',
@@ -182,7 +182,7 @@ class Users_model extends CI_Model {
                     last_name,
                     email,
                     language,
-                    is_admin,
+                    role,
                     status,
                     deleted,
                     validation_code,
@@ -250,7 +250,7 @@ class Users_model extends CI_Model {
                     last_name = " . $this->db->escape($data['last_name']) . ",
                     email = " . $this->db->escape($data['email']) . ",
                     language = " . $this->db->escape($data['language']) . ",
-                    is_admin = " . $this->db->escape($data['is_admin']) . ",
+                    role = " . $this->db->escape($data['role']) . ",
                     status = " . $this->db->escape($data['status']) . ",
                     updated = '" . date('Y-m-d H:i:s') . "'
                 WHERE id = " . $this->db->escape($data['id']) . "
@@ -333,7 +333,7 @@ class Users_model extends CI_Model {
             $sql = "
                 UPDATE {$this->_db}
                 SET
-                    is_admin = '0',
+                    role = '0',
                     status = '0',
                     deleted = '1',
                     updated = '" . date('Y-m-d H:i:s') . "'
@@ -374,7 +374,7 @@ class Users_model extends CI_Model {
                     last_name,
                     email,
                     language,
-                    is_admin,
+                    role,
                     status,
                     created,
                     updated
@@ -515,16 +515,16 @@ class Users_model extends CI_Model {
      * @param  array $data
      * @return mixed|boolean
      */
-    function reset_password($data = array())
+    function reset_password($email = FALSE)
     {
-        if ($data)
+        if ($email)
         {
             $sql = "
                 SELECT
                     id,
                     first_name
                 FROM {$this->_db}
-                WHERE email = " . $this->db->escape($data['email']) . "
+                WHERE SHA1(email) = " . $this->db->escape($email) . "
                     AND status = '1'
                     AND deleted = '0'
                 LIMIT 1

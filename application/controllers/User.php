@@ -68,7 +68,7 @@ class User extends Public_Controller {
                 else
                 {
                     $logged_in_user = $this->session->userdata('logged_in');
-                    if ($logged_in_user['is_admin'])
+                    if ($logged_in_user['role'] == 'admin')
                     {
                         // redirect to admin dashboard
                         redirect('admin');
@@ -224,15 +224,46 @@ class User extends Public_Controller {
 
         if ($this->form_validation->run() == TRUE)
         {
+			// build the validation URL
+			$encrypt_email = sha1($this->input->post('email', TRUE));
+			$validation_url  = base_url('user/forgot') . "?e={$encrypt_email}";
+			
+			// build email
+			$email_msg  = lang('core email start');
+			$email_msg .= sprintf(lang('users msg email_password_reset'), $this->settings->site_name, $validation_url, $validation_url);
+			$email_msg .= lang('core email end');
+			
+			// send email
+			$this->load->library('email');
+			$config['protocol'] = 'sendmail';
+			$config['mailpath'] = '/usr/sbin/sendmail -f' . $this->settings->site_email;
+			$this->email->initialize($config);
+			$this->email->clear();
+			$this->email->from($this->settings->site_email, $this->settings->site_name);
+			$this->email->reply_to($this->settings->site_email, $this->settings->site_name);
+			$this->email->to($this->input->post('email', TRUE));
+			$this->email->subject(lang('users msg email_password_reset_title'));
+			$this->email->message($email_msg);
+			$this->email->send();
+			#exit ($this->email->print_debugger());
+
+			$this->session->set_flashdata('message', lang('users msg password_reset'));
+			
+			// redirect home and display message
+            redirect(base_url());
+		}
+		
+		if ($encrypted_email = $this->input->get('e'))
+		{		
             // save the changes
-            $results = $this->users_model->reset_password($this->input->post());
+            $results = $this->users_model->reset_password($encrypted_email);
 
             if ($results)
             {
                 // build email
                 $reset_url  = base_url('login');
                 $email_msg  = lang('core email start');
-                $email_msg .= sprintf(lang('users msg email_password_reset'), $this->settings->site_name, $results['new_password'], $reset_url, $reset_url);
+                $email_msg .= sprintf(lang('users msg email_password_reset_success'), $this->settings->site_name, $results['new_password'], $reset_url, $reset_url);
                 $email_msg .= lang('core email end');
 
                 // send email
@@ -244,10 +275,10 @@ class User extends Public_Controller {
                 $this->email->from($this->settings->site_email, $this->settings->site_name);
                 $this->email->reply_to($this->settings->site_email, $this->settings->site_name);
                 $this->email->to($this->input->post('email', TRUE));
-                $this->email->subject(sprintf(lang('users msg email_password_reset_title'), $results['first_name']));
+                $this->email->subject(sprintf(lang('users msg email_password_reset_title_success'), $results['first_name']));
                 $this->email->message($email_msg);
                 $this->email->send();
-                #echo $this->email->print_debugger();
+                #exit ($this->email->print_debugger());
 
                 $this->session->set_flashdata('message', sprintf(lang('users msg password_reset_success'), $results['first_name']));
             }

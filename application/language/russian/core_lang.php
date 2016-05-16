@@ -32,6 +32,14 @@ $lang['core email end']                  	= "</body></html>";
 // Additional date_lang
 $lang['UM75']	                         	= "(UTC -7:00) Arizona Time";
 
+// Language
+$lang['english']                            = "Aнглийский";
+$lang['russian']                            = "Русский";
+$lang['ukrainian']                          = "Украинский";
+$lang['en']                                 = "English";
+$lang['ru']                                 = "Русский";
+$lang['uk']                                 = "Українська";
+
 // Errors
 $lang['core error no_results']              = "Ничего не найдено!";
 $lang['core error session_language']        = "Проблема при языковых настройках!";

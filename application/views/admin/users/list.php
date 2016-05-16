@@ -38,8 +38,8 @@
                     <?php if ($sort == 'status') : ?><span class="glyphicon glyphicon-arrow-<?php echo (($dir == 'asc') ? 'up' : 'down'); ?>"></span><?php endif; ?>
                 </td>
                 <td>
-                    <a href="<?php echo current_url(); ?>?sort=is_admin&dir=<?php echo (($dir == 'asc' ) ? 'desc' : 'asc'); ?>&limit=<?php echo $limit; ?>&offset=<?php echo $offset; ?><?php echo $filter; ?>"><?php echo lang('users col is_admin'); ?></a>
-                    <?php if ($sort == 'is_admin') : ?><span class="glyphicon glyphicon-arrow-<?php echo (($dir == 'asc') ? 'up' : 'down'); ?>"></span><?php endif; ?>
+                    <a href="<?php echo current_url(); ?>?sort=role&dir=<?php echo (($dir == 'asc' ) ? 'desc' : 'asc'); ?>&limit=<?php echo $limit; ?>&offset=<?php echo $offset; ?><?php echo $filter; ?>"><?php echo lang('users col role'); ?></a>
+                    <?php if ($sort == 'role') : ?><span class="glyphicon glyphicon-arrow-<?php echo (($dir == 'asc') ? 'up' : 'down'); ?>"></span><?php endif; ?>
                 </td>
                 <td class="pull-right">
                     <?php echo lang('admin col actions'); ?>
@@ -91,8 +91,8 @@
                         <td<?php echo (($sort == 'status') ? ' class="sorted"' : ''); ?>>
                             <?php echo ($user['status']) ? '<span class="active">' . lang('admin input active') . '</span>' : '<span class="inactive">' . lang('admin input inactive') . '</span>'; ?>
                         </td>
-                        <td<?php echo (($sort == 'is_admin') ? ' class="sorted"' : ''); ?>>
-                            <?php echo ($user['is_admin']) ? lang('core text yes') : lang('core text no'); ?>
+                        <td<?php echo (($sort == 'role') ? ' class="sorted"' : ''); ?>>
+                            <?php echo ( ! empty($user['role'])) ? lang('users input role_' . $user['role']) : ''; ?>
                         </td>
                         <td>
                             <div class="text-right">

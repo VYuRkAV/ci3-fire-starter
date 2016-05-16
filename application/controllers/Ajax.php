@@ -21,7 +21,7 @@ class Ajax extends Public_Controller {
      */
 	function set_session_language()
 	{
-        $language = $this->input->post('language');
+        $language = substr($this->input->post('language'), 0, 16);
         $this->session->language = $language;
         $results['success'] = TRUE;
         echo json_encode($results);

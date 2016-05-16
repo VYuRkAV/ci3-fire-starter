@@ -3,16 +3,16 @@
  * Default Public Template
  */
 ?><!DOCTYPE html>
-<html>
+<html lang="<?php echo $html_lang ?>">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=<?php echo $this->settings->site_version; ?>">
 	<link rel="icon" type="image/x-icon" href="/favicon.ico?v=<?php echo $this->settings->site_version; ?>">
-    <title><?php echo $page_title; ?> - <?php echo $this->settings->site_name; ?></title>
+    <title><?php echo $page_title; ?></title>
     <meta name="keywords" content="<?php echo $this->settings->meta_keywords; ?>">
-    <meta name="description" content="<?php echo $this->settings->meta_description; ?>">
+    <meta name="description" content="<?php echo $this->settings->meta_description[$this->session->language]; ?>">
 
     <?php // CSS files ?>
     <?php if (isset($css_files) && is_array($css_files)) : ?>
@@ -55,7 +55,7 @@
                 <?php // Nav bar right ?>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if ($this->session->userdata('logged_in')) : ?>
-                        <?php if ($this->user['is_admin']) : ?>
+                        <?php if ($this->user['role'] == 'admin' OR $this->user['role'] == 'editor') : ?>
                             <li>
                                 <a href="<?php echo base_url('admin'); ?>"><?php echo lang('core button admin'); ?></a>
                             </li>
@@ -71,17 +71,17 @@
                     <li>
                         <span class="dropdown">
                             <button id="session-language" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
-                                <i class="fa fa-language"></i>
+                                <span class="glyphicon glyphicon-globe"></span>
                                 <span class="caret"></span>
                             </button>
                             <ul id="session-language-dropdown" class="dropdown-menu" role="menu" aria-labelledby="session-language">
-                                <?php foreach ($this->languages as $key=>$name) : ?>
+                                <?php foreach ($this->settings->idioms as $language_key => $language_name) : ?>
                                     <li>
-                                        <a href="#" rel="<?php echo $key; ?>">
-                                            <?php if ($key == $this->session->language) : ?>
-                                                <i class="fa fa-check selected-session-language"></i>
+                                        <a href="#" rel="<?php echo $language_key; ?>">
+                                            <?php if ($language_key == $this->session->language) : ?>
+                                                <span class="glyphicon glyphicon-chevron-right selected-session-language"></span>
                                             <?php endif; ?>
-                                            <?php echo $name; ?>
+                                            <?php echo lang(substr($language_key, 0, 2)); ?>
                                         </a>
                                     </li>
                                 <?php endforeach; ?>
@@ -95,38 +95,40 @@
 
     <?php // Main body ?>
     <div class="container theme-showcase" role="main">
+        <div id="container">
 
-        <?php // Page title ?>
-        <div class="page-header">
-            <h1><?php echo $page_header; ?></h1>
+			<?php // Page title ?>
+            <div class="page-header">
+                <h1><?php echo $page_header; ?></h1>
+            </div>
+    
+            <?php // System messages ?>
+            <?php if ($this->session->flashdata('message')) : ?>
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <?php echo $this->session->flashdata('message'); ?>
+                </div>
+            <?php elseif ($this->session->flashdata('error')) : ?>
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <?php echo $this->session->flashdata('error'); ?>
+                </div>
+            <?php elseif (validation_errors()) : ?>
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <?php echo validation_errors(); ?>
+                </div>
+            <?php elseif ($this->error) : ?>
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <?php echo $this->error; ?>
+                </div>
+            <?php endif; ?>
+    
+            <?php // Main content ?>
+            <?php echo $content; ?>
+            
         </div>
-
-        <?php // System messages ?>
-        <?php if ($this->session->flashdata('message')) : ?>
-            <div class="alert alert-success alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <?php echo $this->session->flashdata('message'); ?>
-            </div>
-        <?php elseif ($this->session->flashdata('error')) : ?>
-            <div class="alert alert-danger alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <?php echo $this->session->flashdata('error'); ?>
-            </div>
-        <?php elseif (validation_errors()) : ?>
-            <div class="alert alert-danger alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <?php echo validation_errors(); ?>
-            </div>
-        <?php elseif ($this->error) : ?>
-            <div class="alert alert-danger alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <?php echo $this->error; ?>
-            </div>
-        <?php endif; ?>
-
-        <?php // Main content ?>
-        <?php echo $content; ?>
-
     </div>
 
     <?php // Footer ?>
@@ -136,12 +138,16 @@
             <p class="text-muted">
                 <?php echo lang('core text page_rendered'); ?>
                 | CodeIgniter v<?php echo CI_VERSION; ?>
+                | <a href="http://jasonbaier.github.io/ci3-fire-starter/" target="_blank">CI3 Fire Starter</a>
                 | <?php echo $this->settings->site_name; ?> v<?php echo $this->settings->site_version; ?>
-                | <a href="http://jasonbaier.github.io/ci3-fire-starter/" target="_blank">Github.com</a>
+                | <a href="https://github.com/VYuRkAV/ci3-fire-starter" target="_blank">Github.com</a>
             </p>
         </div>
     </footer>
-
+    
+    <?php // Some text ?>
+    <?php echo $html_footer; ?>
+    
     <?php // Javascript files ?>
     <?php if (isset($js_files) && is_array($js_files)) : ?>
         <?php foreach ($js_files as $js) : ?>

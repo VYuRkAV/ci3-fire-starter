@@ -14,9 +14,9 @@ class Contact extends Public_Controller {
 
         // load the model file
         $this->load->model('contact_model');
-
-        // load the captcha helper
-        $this->load->helper('captcha');
+		
+		// load the recaptcha library
+		$this->load->library(array('recaptcha', 'email'));
     }
 
 
@@ -36,7 +36,7 @@ class Contact extends Public_Controller {
         $this->form_validation->set_rules('email', lang('contact input email'), 'required|trim|valid_email|min_length[10]|max_length[256]');
         $this->form_validation->set_rules('title', lang('contact input title'), 'required|trim|max_length[128]');
         $this->form_validation->set_rules('message', lang('contact input message'), 'required|trim|min_length[10]');
-        $this->form_validation->set_rules('captcha', lang('contact input captcha'), 'required|trim|callback__check_captcha');
+        $this->form_validation->set_rules('g-recaptcha-response', lang('contact input captcha'), 'required|trim|callback__check_captcha');
 
         if ($this->form_validation->run() == TRUE)
         {
@@ -57,33 +57,14 @@ class Contact extends Public_Controller {
             }
         }
 
-        // create captcha image
-        $captcha = create_captcha(array(
-            'img_path'   => "./captcha/",
-            'img_url'    => base_url('/captcha') . "/",
-            'font_path'  => FCPATH . "themes/core/fonts/bromine/Bromine.ttf",
-            'img_width'	 => 170,
-            'img_height' => 50
-        ));
-
-        $captcha_data = array(
-            'captcha_time' => $captcha['time'],
-            'ip_address'   => $this->input->ip_address(),
-            'word'	       => $captcha['word']
-        );
-
-        // store captcha image
-        $this->contact_model->save_captcha($captcha_data);
-
         // setup page header data
         $this->set_title( lang('contact title') );
+		$this->set_html_footer($this->recaptcha->getScriptTag());
 
         $data = $this->includes;
 
         // set content data
-        $content_data = array(
-            'captcha_image' => $captcha['image']
-        );
+        $content_data['widget'] = $this->recaptcha->getWidget();
 
         // load views
         $data['content'] = $this->load->view('contact/form', $content_data, TRUE);
@@ -102,19 +83,16 @@ class Contact extends Public_Controller {
      * @param  string $captcha
      * @return string|boolean
      */
-    function _check_captcha($captcha)
+    function _check_captcha($recaptcha)
     {
-        $verified = $this->contact_model->verify_captcha($captcha);
-
-        if ($verified == FALSE)
-        {
-            $this->form_validation->set_message('_check_captcha', lang('contact error captcha'));
+        $response = $this->recaptcha->verifyResponse($recaptcha);
+		
+		if (isset($response['success']) and $response['success'] === true) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('_check_captcha', lang('contact error captcha'));
             return FALSE;
-        }
-        else
-        {
-            return $captcha;
-        }
+		}
     }
 
 }

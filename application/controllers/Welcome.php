@@ -11,6 +11,9 @@ class Welcome extends Public_Controller {
 
         // load the language file
         $this->lang->load('welcome');
+		
+		// load the model file
+        $this->load->model('pages_model');
     }
 
 
@@ -19,15 +22,22 @@ class Welcome extends Public_Controller {
      */
 	function index()
 	{
-        // setup page header data
-        $this->set_title(sprintf(lang('welcome title'), $this->settings->site_name));
+		// get content
+		$content_page = $this->pages_model->get_content('welcome', $this->session->language);
+		
+		foreach ($content_page as $content)
+		{
+			// set content data
+			$content_data[$content['name']] = $content['value'];			
+		}
+		
+        // setup page title data
+        $this->set_title(lang('welcome title'));
+		
+		// setup page header data
+        empty($content_data['head_message']) ? '' : $this->set_page_header($content_data['head_message']);
 
         $data = $this->includes;
-
-        // set content data
-        $content_data = array(
-            'welcome_message' => $this->settings->welcome_message[$this->session->language]
-        );
 
         // load views
         $data['content'] = $this->load->view('welcome', $content_data, TRUE);

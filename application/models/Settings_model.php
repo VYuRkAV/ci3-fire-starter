@@ -57,7 +57,7 @@ class Settings_model extends CI_Model {
     {
         if ($data && $user_id)
         {
-            $saved = FALSE;
+			$this->db->trans_start();
 
             foreach ($data as $key => $value)
             {
@@ -70,20 +70,12 @@ class Settings_model extends CI_Model {
                 ";
 
                 $this->db->query($sql);
-
-                if ($this->db->affected_rows() > 0)
-                {
-                    $saved = TRUE;
-                }
             }
-
-            if ($saved)
-            {
-                return TRUE;
-            }
+			
+			$this->db->trans_complete();
         }
 
-        return FALSE;
+        return $this->db->trans_status();
     }
 
 }

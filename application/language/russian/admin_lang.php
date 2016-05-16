@@ -16,6 +16,7 @@ $lang['admin button settings']            = "Настройки";
 $lang['admin button users']               = "Пользователи";
 $lang['admin button users_add']           = "Добавить нового пользователя";
 $lang['admin button users_list']          = "Список пользователей";
+$lang['admin button pages']               = "Cтраницы";
 
 // Tooltips
 $lang['admin tooltip csv_export']         = "Экстпортировать показанные данные в CSV файл.";

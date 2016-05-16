@@ -59,17 +59,4 @@ $(document).ready(function() {
         window.location.href = currentUrl[0] + uriParams;
     });
 
-
-    /**
-     * Enable Summernote WYSIWYG editor on any textareas with the 'editor' class
-     */
-    if ($('textarea.editor').length) {
-        $('textarea.editor').each(function() {
-            var id = $(this).attr('id');
-            $('#' + id).summernote({
-                height: 300
-            });
-        });
-    }
-
 });

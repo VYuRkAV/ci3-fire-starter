@@ -31,21 +31,27 @@ class Settings extends Admin_Controller {
                 if ($setting['translate'])
                 {
                     // setup a validation for each translation
-                    foreach ($this->session->languages as $language_key=>$language_name)
+                    foreach ($this->settings->idioms as $language_key => $language_name)
                     {
-                        $this->form_validation->set_rules($setting['name'] . "[" . $language_key . "]", $setting['label'] . " [" . $language_name . "]", $setting['validation']);
+                        $this->form_validation->set_rules($setting['name'] . "[" . $language_key . "]", lang('admin settings label ' . $setting['name']), $setting['validation']);
                     }
                 }
                 else
                 {
                     // single validation
-                    $this->form_validation->set_rules($setting['name'], $setting['label'], $setting['validation']);
+                    $this->form_validation->set_rules($setting['name'], lang('admin settings label ' . $setting['name']), $setting['validation']);
                 }
             }
+						
+			if ($setting['input_type'] == 'textarea')
+			{
+				$this->set_textarea();
+			}
         }
 
         if ($this->form_validation->run() == TRUE)
         {
+			$this->cache->clean();
             $user = $this->session->userdata('logged_in');
 
             // save the settings
@@ -73,8 +79,6 @@ class Settings extends Admin_Controller {
 
         // setup page header data
 		$this
-			->add_css_theme('summernote.css')
-			->add_js_theme('summernote.min.js')
 			->add_js_theme('settings_i18n.js', TRUE)
 			->set_title(lang('admin settings title'));
 

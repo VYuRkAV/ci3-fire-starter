@@ -49,7 +49,7 @@
         }
         ?>
 
-        <?php if ($setting['translate'] && $this->session->languages && $this->session->language) : ?>
+        <?php if ($setting['translate'] && $this->settings->idioms && $this->session->language) : ?>
 
             <?php // has translations ?>
             <?php
@@ -58,7 +58,7 @@
             {
                 $old_value = $setting['value'];
                 $setting['value'] = array();
-                foreach ($this->session->languages as $language_key=>$language_name)
+                foreach ($this->settings->idioms as $language_key => $language_name)
                 {
                     $setting['value'][$language_key] = ($language_key == $this->session->language) ? $old_value : "";
                 }
@@ -66,20 +66,20 @@
             ?>
             <div class="row">
                 <div class="form-group <?php echo $col_size; ?><?php echo form_error($setting['name']) ? ' has-error' : ''; ?>">
-                    <?php echo form_label($setting['label'], $setting['name'], array('class'=>'control-label')); ?>
+                    <?php echo form_label(lang('admin settings label ' . $setting['name']), $setting['name'], array('class'=>'control-label')); ?>
                     <?php if (strpos($setting['validation'], 'required') !== FALSE) : ?>
                         <span class="required">*</span>
                     <?php endif; ?>
                     <div role="tabpanel">
                         <ul class="nav nav-tabs" role="tablist">
-                            <?php foreach ($this->session->languages as $language_key=>$language_name) : ?>
-                                <li role="presentation" class="<?php echo ($language_key == $this->session->language) ? 'active' : ''; ?>"><a href="#<?php echo $language_key; ?>" aria-controls="<?php echo $language_key; ?>" role="tab" data-toggle="tab"><?php echo $language_name; ?></a></li>
+                            <?php foreach ($this->settings->idioms as $language_key => $language_name) : ?>
+                                <li role="presentation" class="<?php echo ($language_key == $this->session->language) ? 'active' : ''; ?>"><a href="#<?php echo $setting['id'] . "-" . $language_key; ?>" aria-controls="<?php echo $setting['id'] . "-" . $language_key; ?>" role="tab" data-toggle="tab"><?php echo $language_name; ?></a></li>
                             <?php endforeach; ?>
                         </ul>
 
                         <div class="tab-content">
-                            <?php foreach ($this->session->languages as $language_key=>$language_name) : ?>
-                                <div role="tabpanel" class="tab-pane<?php echo ($language_key == $this->session->language) ? ' active' : ''; ?>" id="<?php echo $language_key; ?>">
+                            <?php foreach ($this->settings->idioms as $language_key => $language_name) : ?>
+                                <div role="tabpanel" class="tab-pane fade<?php echo ($language_key == $this->session->language) ? ' in active' : ''; ?>" id="<?php echo $setting['id'] . "-" . $language_key; ?>">
                                     <br />
                                     <?php
                                     $field_data['name']  = $setting['name'] . "[" . $language_key . "]";
@@ -119,10 +119,7 @@
                             <?php endforeach; ?>
                         </div>
                     </div>
-
-                    <?php if ($setting['help_text']) : ?>
-                        <span class="help-block"><?php echo $setting['help_text']; ?></span>
-                    <?php endif; ?>
+                    <span class="help-block"><?php echo lang('admin settings help_text ' . $setting['name']); ?></span>
                 </div>
             </div>
 
@@ -136,7 +133,7 @@
             ?>
             <div class="row">
                 <div class="form-group <?php echo $col_size; ?><?php echo form_error($setting['name']) ? ' has-error' : ''; ?>">
-                    <?php echo form_label($setting['label'], $setting['name'], array('class'=>'control-label')); ?>
+                    <?php echo form_label(lang('admin settings label ' . $setting['name']), $setting['name'], array('class'=>'control-label')); ?>
                     <?php if (strpos($setting['validation'], 'required') !== FALSE) : ?>
                         <span class="required">*</span>
                     <?php endif; ?>
@@ -170,8 +167,8 @@
                     }
                     ?>
 
-                    <?php if ($setting['help_text']) : ?>
-                        <span class="help-block"><?php echo $setting['help_text']; ?></span>
+                    <?php if ($this->lang->line('admin settings help_text ' . $setting['name'], FALSE)) : ?>
+                        <span class="help-block"><?php echo lang('admin settings help_text ' . $setting['name']); ?></span>
                     <?php endif; ?>
                 </div>
             </div>

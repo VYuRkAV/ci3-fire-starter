@@ -37,7 +37,7 @@
         <div class="form-group col-sm-6<?php echo form_error('language') ? ' has-error' : ''; ?>">
             <?php echo form_label(lang('users input language'), 'language', array('class'=>'control-label')); ?>
             <span class="required">*</span>
-            <?php echo form_dropdown('language', $this->languages, (isset($user['language']) ? $user['language'] : $this->config->item('language')), 'id="language" class="form-control"'); ?>
+            <?php echo form_dropdown('language', $this->settings->idioms, (isset($user['language']) ? $user['language'] : $this->config->item('language')), 'id="language" class="form-control"'); ?>
         </div>
     </div>
 
@@ -70,23 +70,15 @@
         </div>
 
         <?php // administrator ?>
-        <div class="form-group col-sm-3<?php echo form_error('is_admin') ? ' has-error' : ''; ?>">
-            <?php echo form_label(lang('users input is_admin'), '', array('class'=>'control-label')); ?>
+        <div class="form-group col-sm-3<?php echo form_error('role') ? ' has-error' : ''; ?>">
+            <?php echo form_label(lang('users label role'), '', array('class'=>'control-label')); ?>
             <span class="required">*</span>
             <?php if ( ! $user['id'] OR $user['id'] > 1) : ?>
-                <div class="radio">
-                    <label>
-                        <?php echo form_radio(array('name'=>'is_admin', 'id'=>'radio-is_admin-1', 'value'=>'0', 'checked'=>(( ! isset($user['is_admin']) OR (isset($user['is_admin']) && (int)$user['is_admin'] == 0) && $user['id'] != 1) ? 'checked' : FALSE))); ?>
-                        <?php echo lang('core text no'); ?>
-                    </label>
-                </div>
+                <?php echo form_dropdown('role', array(' '=>lang('admin input select'), 'admin'=>lang('users input role_admin'), 'editor'=>lang('users input role_editor')), (isset($user['role']) ? $user['role'] : lang('admin input select')), 'id="role" class="form-control"'); ?>
+            <?php else : ?>
+                <?php echo form_hidden('role', isset($user['role']) ? $user['role'] : ''); ?>
+                <p class="form-control-static"><?php echo empty($user['role']) ? '-' : lang('users input role_' . $user['role']); ?></p>
             <?php endif; ?>
-            <div class="radio">
-                <label>
-                    <?php echo form_radio(array('name'=>'is_admin', 'id'=>'radio-is_admin-2', 'value'=>'1', 'checked'=>((isset($user['is_admin']) && (int)$user['is_admin'] == 1) ? 'checked' : FALSE))); ?>
-                    <?php echo lang('core text yes'); ?>
-                </label>
-            </div>
         </div>
     </div>
 
