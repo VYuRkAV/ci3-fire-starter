@@ -168,6 +168,7 @@ class MY_Lang extends CI_Lang {
 
 		if ($found !== TRUE)
 		{
+			$_SESSION['language'] = empty($config['language']) ? 'english' : $config['language'];
 			show_error('Unable to load the requested language file: language/'.$idiom.'/'.$langfile);
 		}
 

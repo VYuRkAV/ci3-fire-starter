@@ -61,26 +61,28 @@
                 <?php // Nav bar right ?>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="<?php echo base_url('logout'); ?>"><?php echo lang('core button logout'); ?></a></li>
-                    <li>
-                        <span class="dropdown">
-                            <button id="session-language" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
-                                <span class="glyphicon glyphicon-globe"></span>
-                                <span class="caret"></span>
-                            </button>
-                            <ul id="session-language-dropdown" class="dropdown-menu" role="menu" aria-labelledby="session-language">
-                                <?php foreach ($this->settings->idioms as $language_key => $language_name) : ?>
-                                    <li>
-                                        <a href="#" rel="<?php echo $language_key; ?>">
-                                            <?php if ($language_key == $this->session->language) : ?>
-                                                <span class="glyphicon glyphicon-chevron-right selected-session-language"></span>
-                                            <?php endif; ?>
-                                            <?php echo lang(substr($language_key, 0, 2)); ?>
-                                        </a>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </span>
-                    </li>
+                    <?php if (count($this->settings->idioms) > 1) : ?>
+                        <li>
+                            <span class="dropdown">
+                                <button id="session-language" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-globe"></span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul id="session-language-dropdown" class="dropdown-menu" role="menu" aria-labelledby="session-language">
+                                    <?php foreach ($this->settings->idioms as $language_key => $language_name) : ?>
+                                        <li>
+                                            <a href="#" rel="<?php echo $language_key; ?>">
+                                                <?php if ($language_key == $this->session->language) : ?>
+                                                    <span class="glyphicon glyphicon-chevron-right selected-session-language"></span>
+                                                <?php endif; ?>
+                                                <?php echo lang(substr($language_key, 0, 2)); ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </span>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
