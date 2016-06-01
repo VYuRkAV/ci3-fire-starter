@@ -16,7 +16,7 @@ $lang['pages col username']                        = "Логин";
 $lang['pages col last_update']                     = "Дата изменения";
 
 // Form Labels
-$lang['pages welcome label head_message']          = "Заголовок страницы";
+$lang['pages label head_message']          = "Заголовок страницы";
 $lang['pages welcome label welcome_message']       = "Содержание страницы";
 
 // Form Inputs

@@ -95,8 +95,7 @@ class Pages_model extends CI_Model {
 					input_type,
 					page,
 					show_editor,
-					input_size,
-					validation,		
+					input_size,		
 			";
 			
 			foreach ($this->settings->idioms as $language_key => $language_name)
@@ -107,17 +106,18 @@ class Pages_model extends CI_Model {
 					FROM content 
 					WHERE content.page_id = {$this->_db}.id 
 					AND content.language = " . $this->db->escape($language_key) . ")
-					AS {$language_key}, 
+					AS {$language_key},
 				";
 			}
 			
 			$sql .="
-			        sort_order
+			        validation
 				FROM {$this->_db}
 			";
 			
 			$sql .= "
 			    WHERE page = " . $this->db->escape($page) . "
+				ORDER BY sort_order ASC
 			";
 			
 			$query = $this->db->query($sql);

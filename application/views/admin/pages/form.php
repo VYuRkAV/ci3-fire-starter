@@ -44,7 +44,16 @@
         
                         <div class="row">
                             <div class="form-group <?php echo $col_size; ?><?php echo form_error($content['id'].$content['name'].'[value]') ? ' has-error' : ''; ?>">
-                                <?php echo lang('pages ' . $content['page'] . ' label ' . $content['name'], $content['id'] . "[" . $language_key . "]", array('class'=>'control-label')); ?>
+                                <?php // choice of language line
+								if ($this->lang->line('pages ' . $content['page'] . ' label ' . $content['name'], FALSE))
+								{
+									echo lang('pages ' . $content['page'] . ' label ' . $content['name'], $content['id'] . "[" . $language_key . "]", array('class'=>'control-label'));
+								}
+                                else
+								{
+								    echo lang('pages label ' . $content['name'], $content['id'] . "[" . $language_key . "]", array('class'=>'control-label'));
+								}
+                                ?>
                                 <?php if (strpos($content['validation'], 'required')) : ?>
                                     <span class="required">*</span>
                                 <?php endif; ?>

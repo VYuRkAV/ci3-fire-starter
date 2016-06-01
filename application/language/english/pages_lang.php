@@ -16,7 +16,7 @@ $lang['pages col username']                        = "Login";
 $lang['pages col last_update']                     = "Updated";
 
 // Form Labels
-$lang['pages welcome label head_message']          = "Page Header";
+$lang['pages label head_message']          = "Page Header";
 $lang['pages welcome label welcome_message']       = "Page Content";
 
 // Form Inputs

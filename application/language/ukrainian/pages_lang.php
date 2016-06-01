@@ -16,7 +16,7 @@ $lang['pages col username']                        = "Користувач";
 $lang['pages col last_update']                     = "Останнє оновлення";
 
 // Form Labels
-$lang['pages welcome label head_message']          = "Заголовок сторінки";
+$lang['pages label head_message']          = "Заголовок сторінки";
 $lang['pages welcome label welcome_message']       = "Зміст сторінки";
 
 // Form Inputs
