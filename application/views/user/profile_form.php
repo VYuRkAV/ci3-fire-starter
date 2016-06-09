@@ -41,7 +41,7 @@
         <div class="form-group col-sm-6<?php echo form_error('language') ? ' has-error' : ''; ?>">
             <?php echo form_label(lang('users input language'), 'language', array('class'=>'control-label')); ?>
             <span class="required">*</span>
-            <?php echo form_dropdown('language', $languages, (empty($user['language']) ? $this->lang->idiom : $user['language']), 'id="language" class="form-control"'); ?>
+            <?php echo form_dropdown('language', $languages, (empty($user['language']) ? $this->session->language : $user['language']), 'id="language" class="form-control"'); ?>
         </div>
     </div>
 
