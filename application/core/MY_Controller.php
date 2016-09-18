@@ -52,26 +52,24 @@ class MY_Controller extends CI_Controller {
         // load the core language file
         $this->lang->load('core');
 		
-		// Set html lang
-		$this->includes[ 'html_lang' ] = substr($this->session->language, 0, 2);
+	// Set html lang
+	$this->includes[ 'html_lang' ] = substr($this->session->language, 0, 2);
 		
-		// set global header data - can be merged with or overwritten in controllers
+	// set global header data - can be merged with or overwritten in controllers
         $this
             ->add_external_css(
                 array(
 				    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous',
                     'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous',
-                    '/themes/core/css/core.css'
+                    base_url( "/themes/core/css/core.css" )
                 ))
             ->add_external_js(
                 array(
                     'https://code.jquery.com/jquery-1.12.3.min.js',
                     'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous'
                 ));
-				
-		$this->includes[ 'js_files_i18n' ] = array(
-            $this->jsi18n->translate("/themes/core/js/core_i18n.js")
-        );
+			
+		$this->includes[ 'js_files_i18n' ][ 'core_i18n' ] = $this->jsi18n->translate("/themes/core/js/core_i18n.js");
 
         // Set or caching settings
 		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
@@ -98,18 +96,21 @@ class MY_Controller extends CI_Controller {
 			$this->cache->save('settings', $this->settings, 2592000);
 		}
 		
-		// if not required Page Title (Set Default Site Name)
-		$this->includes[ 'page_title' ] = $this->settings->site_name;
+	// if not required Page Title (Set Default Site Name)
+	$this->includes[ 'page_title' ] = $this->settings->site_name;
 		
-		// set arbitrary text
-		$this->includes[ 'html_footer' ] = $this->settings->html_footer.PHP_EOL;
+	// set arbitrary text
+	$this->includes[ 'html_footer' ] = $this->settings->html_footer.PHP_EOL;
 
         // get current uri
         $this->current_uri = "/" . uri_string();
 
         // set the time zone
         $timezones = $this->config->item('timezones');
-        date_default_timezone_set($timezones[$this->settings->timezones]);
+        if (function_exists('date_default_timezone_set'))
+        {
+            date_default_timezone_set($timezones[$this->settings->timezones]);
+        }
 
         // get current user
         $this->user = $this->session->userdata('logged_in');
@@ -147,7 +148,6 @@ class MY_Controller extends CI_Controller {
      * @access  public
      * @param   mixed
      * @param string, default = NULL
-	 * @param string, default = NULL
      * @return  chained object
      */
     function add_external_css($css_files, $path = NULL)
@@ -428,10 +428,10 @@ class MY_Controller extends CI_Controller {
     }
 	
 	
-	/* Set Page html string into the <footer> tag
+    /* Set Page html string into the <footer> tag
      * sometime, we want to have insert some text in the <footer> tag
-	 * see example in Controller Contact - reCaptcha
-	 * so, use this function
+     * see example in Controller Contact - reCaptcha
+     * so, use this function
      * --------------------------------------
      * @since   Version 0.0.1
      * @access  public

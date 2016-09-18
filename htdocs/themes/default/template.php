@@ -41,7 +41,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><?php echo $this->settings->site_name; ?></a>
+                <a class="navbar-brand"id="base-url" href="<?php echo base_url(); ?>"><?php echo $this->settings->site_name; ?></a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <?php // Nav bar left ?>
@@ -61,7 +61,7 @@
                             </li>
                         <?php endif; ?>
                         <li>
-                            <a href="/logout"><?php echo lang('core button logout'); ?></a>
+                            <a href="<?php echo base_url('logout'); ?>"><?php echo lang('core button logout'); ?></a>
                         </li>
                     <?php else : ?>
                         <li class="<?php echo (uri_string() == 'login') ? 'active' : ''; ?>">
@@ -139,6 +139,8 @@
             <div class="clearfix"><hr /></div>
             <p class="text-muted">
                 <?php echo lang('core text page_rendered'); ?>
+                | PHP v<?php echo phpversion(); ?>
+                | <?php echo strtoupper($this->db->platform()); ?> v<?php echo $this->db->version(); ?>
                 | CodeIgniter v<?php echo CI_VERSION; ?>
                 | <a href="http://jasonbaier.github.io/ci3-fire-starter/" target="_blank">CI3 Fire Starter</a>
                 | <?php echo $this->settings->site_name; ?> v<?php echo $this->settings->site_version; ?>

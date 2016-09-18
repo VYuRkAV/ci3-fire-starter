@@ -3,7 +3,7 @@
  */
 var config = {
     logging : true,
-    baseURL : location.protocol + "//" + location.host + "/"
+    baseURL: document.getElementById("base-url").href
 };
 
 

@@ -140,11 +140,9 @@ class Contact extends Editor_Controller {
 
         // setup page header data
 		$this
-			->add_css_theme( 'bootstrap-datepicker.css' )
-			->add_js_theme( 'bootstrap-datepicker.js' )
 			->add_js_theme( 'contact_i18n.js', TRUE )
 			->set_title( lang('contact title messages_list') );
-		
+
         $data = $this->includes;
 
         // set content data
@@ -196,7 +194,7 @@ class Contact extends Editor_Controller {
 
         if ($this->input->get('created'))
         {
-            $filters['created'] = $this->input->get('created', TRUE);
+            $filters['created'] = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->get('created', TRUE))));
         }
 
         // get all messages

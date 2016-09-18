@@ -58,6 +58,12 @@ class User extends Public_Controller {
         {
             if ($this->form_validation->run() == TRUE)
             {
+				$logged_in_user = $this->session->userdata('logged_in');
+				
+				if (array_key_exists($logged_in_user['language'], $this->settings->idioms))
+				{
+					$this->session->language = $logged_in_user['language'];
+				}
                 if ($this->session->userdata('redirect'))
                 {
                     // redirect to desired page
@@ -67,7 +73,6 @@ class User extends Public_Controller {
                 }
                 else
                 {
-                    $logged_in_user = $this->session->userdata('logged_in');
                     if ($logged_in_user['role'] == 'admin')
                     {
                         // redirect to admin dashboard
