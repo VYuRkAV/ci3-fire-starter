@@ -65,7 +65,7 @@
                         </li>
                     <?php else : ?>
                         <li class="<?php echo (uri_string() == 'login') ? 'active' : ''; ?>">
-                            <a href="<?php echo base_url('/login'); ?>"><?php echo lang('core button login'); ?></a>
+                            <a href="<?php echo base_url('login'); ?>"><?php echo lang('core button login'); ?></a>
                         </li>
                     <?php endif; ?>
                     <?php if (count($this->settings->idioms) > 1) : ?>
@@ -137,6 +137,7 @@
     <footer>
         <div class="container">
             <div class="clearfix"><hr /></div>
+            <p><?php echo $this->settings->copyright; ?></p>
             <p class="text-muted">
                 <?php echo lang('core text page_rendered'); ?>
                 | PHP v<?php echo phpversion(); ?>
@@ -144,7 +145,7 @@
                 | CodeIgniter v<?php echo CI_VERSION; ?>
                 | <a href="http://jasonbaier.github.io/ci3-fire-starter/" target="_blank">CI3 Fire Starter</a>
                 | <?php echo $this->settings->site_name; ?> v<?php echo $this->settings->site_version; ?>
-                | <a href="https://github.com/VYuRkAV/ci3-fire-starter" target="_blank">Github.com</a>
+                | <a href="https://github.com/VYuRkAV/ci3-fire-starter-m" target="_blank">Github.com</a>
             </p>
         </div>
     </footer>

@@ -68,11 +68,13 @@ class MY_Controller extends CI_Controller {
                     'https://code.jquery.com/jquery-1.12.3.min.js',
                     'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous'
                 ));
-			
-		$this->includes[ 'js_files_i18n' ][ 'core_i18n' ] = $this->jsi18n->translate("/themes/core/js/core_i18n.js");
+
+        $core_js = $this->jsi18n->translate("/themes/core/js/core_i18n.js");
+        $core_js = str_replace("<<base_url>>", base_url(), $core_js);
+        $this->includes[ 'js_files_i18n' ] = array($core_js);
 
         // Set or caching settings
-		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+		$this->load->driver('cache', $this->config->item('caching_driver'));
 		
 		if ( ! $this->settings = $this->cache->get('settings'))
 		{
@@ -85,6 +87,8 @@ class MY_Controller extends CI_Controller {
 			}
 			$this->settings->site_version = $this->config->item('site_version');
 			$this->settings->root_folder  = $this->config->item('root_folder');
+			$filetime = date("Y", filemtime(realpath('../application/config/config.php')));
+            $this->settings->copyright = sprintf(lang('core text copyright'), $filetime, $this->config->item('base_url'), $this->settings->site_name);
 			
 			// get languages
 			$languages = $this->lang->get_lang_list();
@@ -99,8 +103,8 @@ class MY_Controller extends CI_Controller {
 	// if not required Page Title (Set Default Site Name)
 	$this->includes[ 'page_title' ] = $this->settings->site_name;
 		
-	// set arbitrary text
-	$this->includes[ 'html_footer' ] = $this->settings->html_footer.PHP_EOL;
+		// set arbitrary text
+		$this->includes[ 'html_footer' ] = $this->settings->html_footer[$this->session->language].PHP_EOL;
 
         // get current uri
         $this->current_uri = "/" . uri_string();

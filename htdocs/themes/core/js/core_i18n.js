@@ -3,7 +3,7 @@
  */
 var config = {
     logging : true,
-    baseURL: document.getElementById("base-url").href
+    baseURL : "<<base_url>>"
 };
 
 

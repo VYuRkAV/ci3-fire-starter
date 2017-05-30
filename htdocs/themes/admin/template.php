@@ -134,7 +134,7 @@
                 | CodeIgniter v<?php echo CI_VERSION; ?>
                 | <a href="http://jasonbaier.github.io/ci3-fire-starter/" target="_blank">CI3 Fire Starter</a>
                 | <?php echo $this->settings->site_name; ?> v<?php echo $this->settings->site_version; ?>
-                | <a href="https://github.com/VYuRkAV/ci3-fire-starter" target="_blank">Github.com</a>
+                | <a href="https://github.com/VYuRkAV/ci3-fire-starter-m" target="_blank">Github.com</a>
             </p>
         </div>
     </footer>

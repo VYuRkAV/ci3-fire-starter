@@ -53,10 +53,6 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
   KEY `ip` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `login_attempts` (`ip`, `attempt`) VALUES
-('109.68.46.107', '2016-05-16 14:20:30'),
-('109.68.46.107', '2016-05-16 14:20:39');
-
 DROP TABLE IF EXISTS `pages`;
 CREATE TABLE IF NOT EXISTS `pages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -103,7 +99,7 @@ INSERT INTO `settings` (`id`, `name`, `input_type`, `options`, `is_numeric`, `sh
 (4, 'meta_description', 'textarea', NULL, '0', '0', 'large', '1', 'trim', 30, 'a:3:{s:7:"english";s:29:"This is the site description.";s:7:"russian";s:28:"Описание сайта.";s:9:"ukrainian";s:20:"Опис сайту.";}', '2016-05-15 12:29:32', 1),
 (5, 'site_email', 'input', NULL, '0', '0', 'medium', '0', 'required|trim|valid_email', 40, 'site@your.site', '2016-05-15 12:29:32', 1),
 (6, 'timezones', 'timezones', NULL, '0', '0', 'medium', '0', 'required|trim', 60, 'UP2', '2016-05-15 12:29:32', 1),
-(7, 'html_footer', 'textarea', NULL, '0', '0', 'large', '0', 'trim', 70, '', '2016-05-15 12:29:32', 1);
+(7, 'html_footer', 'textarea', NULL, '0', '0', 'large', '1', 'trim', 70, 'a:3:{s:7:\"english\";s:0:\"\";s:7:\"russian\";s:0:\"\";s:9:\"ukrainian\";s:0:\"\";}', '2016-05-15 12:29:32', 1);
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (

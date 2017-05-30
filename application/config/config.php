@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | URL to your CodeIgniter root. Typically this will be your base URL,
 | WITH a trailing slash:
 |
-|   http://example.com/
+|	http://example.com/
 |
 | WARNING: You MUST set this value!
 |
@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'CI3_Fire_Starter_M.dev';
+$config['base_url'] = '//ci3fsm.com/';
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ $config['base_url'] = 'CI3_Fire_Starter_M.dev';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = '';
+$config['index_page'] = 'index.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -46,8 +46,8 @@ $config['index_page'] = '';
 | URI string.  The default setting of 'REQUEST_URI' works for most servers.
 | If your links do not seem to work, try one of the other delicious flavors:
 |
-| 'REQUEST_URI'		Uses $_SERVER['REQUEST_URI']
-| 'QUERY_STRING'	Uses $_SERVER['QUERY_STRING']
+| 'REQUEST_URI'    Uses $_SERVER['REQUEST_URI']
+| 'QUERY_STRING'   Uses $_SERVER['QUERY_STRING']
 | 'PATH_INFO'      Uses $_SERVER['PATH_INFO']
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
@@ -160,11 +160,8 @@ $config['composer_autoload'] = FALSE;
 |
 | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 |
-| Note: This option is ignored for CLI requests.
-|
 */
 $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
-
 
 /*
 |--------------------------------------------------------------------------
@@ -173,9 +170,6 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 |
 | By default CodeIgniter uses search-engine friendly segment based URLs:
 | example.com/who/what/where/
-|
-| By default CodeIgniter enables access to the $_GET array.  If for some
-| reason you would like to disable it, set 'allow_get_array' to FALSE.
 |
 | You can optionally enable standard query string based URLs:
 | example.com?who=me&what=something&where=here
@@ -191,7 +185,6 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 | use segment based URLs.
 |
 */
-$config['allow_get_array'] = TRUE;
 $config['enable_query_strings'] = FALSE;
 $config['controller_trigger'] = 'c';
 $config['function_trigger'] = 'm';
@@ -199,11 +192,23 @@ $config['directory_trigger'] = 'd';
 
 /*
 |--------------------------------------------------------------------------
+| Allow $_GET array
+|--------------------------------------------------------------------------
+|
+| By default CodeIgniter enables access to the $_GET array.  If for some
+| reason you would like to disable it, set 'allow_get_array' to FALSE.
+|
+| WARNING: This feature is DEPRECATED and currently available only
+|          for backwards compatibility purposes!
+|
+*/
+$config['allow_get_array'] = TRUE;
+
+/*
+|--------------------------------------------------------------------------
 | Error Logging Threshold
 |--------------------------------------------------------------------------
 |
-| If you have enabled error logging, you can set an error threshold to
-| determine what gets logged. Threshold options are:
 | You can enable error logging by setting a threshold over zero. The
 | threshold determines what gets logged. Threshold options are:
 |
@@ -379,7 +384,7 @@ $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
 $config['sess_save_path'] = APPPATH . 'sessions';
-$config['sess_match_ip'] = FALSE;
+$config['sess_match_ip'] = TRUE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
 
@@ -412,8 +417,8 @@ $config['cookie_httponly'] 	= FALSE;
 | Determines whether to standardize newline characters in input data,
 | meaning to replace \r\n, \r, \n occurrences with the PHP_EOL value.
 |
-| This is particularly useful for portability between UNIX-based OSes,
-| (usually \n) and Windows (\r\n).
+| WARNING: This feature is DEPRECATED and currently available only
+|          for backwards compatibility purposes!
 |
 */
 $config['standardize_newlines'] = FALSE;

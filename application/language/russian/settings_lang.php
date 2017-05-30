@@ -19,7 +19,7 @@ $lang['admin settings label html_footer']           = "HTML Строка";
 $lang['admin settings help_text meta_keywords']     = "Список ключевых слов сайта, разделенные запятой ";
 $lang['admin settings help_text meta_description']  = "Краткое описание Вашего сайта.";
 $lang['admin settings help_text site_email']        = "Все письма будут отправляться с этого E-mail.";
-$lang['admin settings help_text html_footer']       = "Устанавливает html строку в тег <footer>.";
+$lang['admin settings help_text html_footer']       = "Устанавливает html строку в тег <code>&lt;footer&gt;</code>.";
 
 // Messages
 $lang['admin settings msg save_success']            = "Настройки были успешно сохранены.";

@@ -21,7 +21,8 @@ $lang['core button toggle_nav']          	= "Навигация";
 // Text
 $lang['core text no']                    	= "Нет";
 $lang['core text yes']                   	= "Да";
-$lang['core text page_rendered']            	= "Страница сгенерирована за <strong>{elapsed_time}</strong> секунд";
+$lang['core text page_rendered']            = "Страница сгенерирована за <strong>{elapsed_time}</strong> секунд";
+$lang['core text copyright']             	= '© %s Powered by <a href="%s">%s</a>.';
 
 // Emails
 $lang['core email start']                	= "<!DOCTYPE html><html><head><style>

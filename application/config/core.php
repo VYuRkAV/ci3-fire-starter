@@ -6,8 +6,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 
 // Site Details
-$config['site_version']          = "3.1.0.002";
+$config['site_version']          = "3.1.4.001";
 $config['root_folder']           = "htdocs";        // set to whatever your webroot is (htdocs, public_html, etc.) - MAKE SURE you physically rename the /htdocs folder
+$config['caching_driver']        = array('adapter' => 'file', 'backup' => 'file');  // set caching driver (File-based Caching - array('adapter' => 'file', 'backup' => 'file'))
 $config['public_theme']          = "default";       // folder containing your public theme
 $config['private_theme']         = "private";       // folder containing your admin theme
 $config['admin_theme']           = "admin";         // folder containing your admin theme

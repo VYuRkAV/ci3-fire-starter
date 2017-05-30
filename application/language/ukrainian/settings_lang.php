@@ -19,7 +19,7 @@ $lang['admin settings label html_footer']           = "HTML Рядок";
 $lang['admin settings help_text meta_keywords']     = "Список ключових слів сайту (використовуйте кому як роздільник)";
 $lang['admin settings help_text meta_description']  = "Короткий опис Вашого сайту.";
 $lang['admin settings help_text site_email']        = "Всі листи будуть відправлятися з цієї адреси електронної пошти.";
-$lang['admin settings help_text html_footer']       = "Встановлює html рядок в тег <footer>.";
+$lang['admin settings help_text html_footer']       = "Встановлює html рядок в тег <code>&lt;footer&gt;</code>.";
 
 // Messages
 $lang['admin settings msg save_success']            = "Налаштування успішно збережені .";

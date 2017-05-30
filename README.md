@@ -5,8 +5,12 @@ See - [CI3 Fire Starter] (https://github.com/JasonBaier/ci3-fire-starter)
 
 ## WHAT'S NEW
 
+#### Version 3.1.4.001
+09/18/2016
+* Upgraded to CI 3.1.4
+
 #### Version 3.1.0.002
-//2016
+09/18/2016
 * Upgraded to CI 3.1.0
 * Removed bootstrap-datepicker are now using < input type="date" >
 * Display PHP and DB version in footer

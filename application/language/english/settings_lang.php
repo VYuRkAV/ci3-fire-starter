@@ -19,7 +19,7 @@ $lang['admin settings label html_footer']           = "HTML String";
 $lang['admin settings help_text meta_keywords']     = "Comma-seperated list of site keywords";
 $lang['admin settings help_text meta_description']  = "Short description describing your site.";
 $lang['admin settings help_text site_email']        = "Email address all emails will be sent from.";
-$lang['admin settings help_text html_footer']       = "Set html string into the <footer> tag.";
+$lang['admin settings help_text html_footer']       = "Set html string into the <code>&lt;footer&gt;</code> tag.";
 
 // Messages
 $lang['admin settings msg save_success']            = "Settings have been successfully saved.";

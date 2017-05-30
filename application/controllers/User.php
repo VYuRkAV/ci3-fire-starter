@@ -51,38 +51,27 @@ class User extends Public_Controller {
         $this->form_validation->set_rules('username', lang('users input username_email'), 'required|trim|max_length[256]');
         $this->form_validation->set_rules('password', lang('users input password'), 'required|trim|max_length[72]|callback__check_login');
 
-        $ok_to_login = $this->users_model->login_attempts();
-
-        // limit number of login attempts
-        if ($ok_to_login)
+        if ($this->form_validation->run() == TRUE)
         {
-            if ($this->form_validation->run() == TRUE)
+            if ($this->session->userdata('redirect'))
             {
-				$logged_in_user = $this->session->userdata('logged_in');
-				
-				if (array_key_exists($logged_in_user['language'], $this->settings->idioms))
-				{
-					$this->session->language = $logged_in_user['language'];
-				}
-                if ($this->session->userdata('redirect'))
+                // redirect to desired page
+                $redirect = $this->session->userdata('redirect');
+                $this->session->unset_userdata('redirect');
+                redirect($redirect);
+            }
+            else
+            {
+                $logged_in_user = $this->session->userdata('logged_in');
+                if ($logged_in_user['role'] == 'admin' OR $logged_in_user['role'] == 'editor')
                 {
-                    // redirect to desired page
-                    $redirect = $this->session->userdata('redirect');
-                    $this->session->unset_userdata('redirect');
-                    redirect($redirect);
+                    // redirect to admin dashboard
+                    redirect('admin');
                 }
                 else
                 {
-                    if ($logged_in_user['role'] == 'admin')
-                    {
-                        // redirect to admin dashboard
-                        redirect('admin');
-                    }
-                    else
-                    {
-                        // redirect to landing page
-                        redirect(base_url());
-                    }
+                    // redirect to landing page
+                    redirect(base_url());
                 }
             }
         }
@@ -94,13 +83,8 @@ class User extends Public_Controller {
 
         $data = $this->includes;
 
-        // set content data
-        $content_data = array(
-            'ok_to_login' => $ok_to_login
-        );
-
         // load views
-        $data['content'] = $this->load->view('user/login', $content_data, TRUE);
+        $data['content'] = $this->load->view('user/login', NULL, TRUE);
         $this->load->view($this->template, $data);
     }
 
@@ -111,10 +95,8 @@ class User extends Public_Controller {
     function logout()
     {
         $this->session->unset_userdata('logged_in');
-        $this->session->sess_destroy();
-        redirect('login');
+        redirect(base_url());
     }
-
 
     /**
      * Registration Form
@@ -326,15 +308,25 @@ class User extends Public_Controller {
      */
     function _check_login($password)
     {
-        $login = $this->users_model->login($this->input->post('username', TRUE), $password);
-
-        if ($login)
+        // limit number of login attempts
+        $ok_to_login = $this->users_model->login_attempts();
+        if ($ok_to_login)
         {
-            $this->session->set_userdata('logged_in', $login);
-            return TRUE;
-        }
+            $login = $this->users_model->login($this->input->post('username', TRUE), $password);
+            if ($login)
+            {
+                $this->session->set_userdata('logged_in', $login);
+                if (array_key_exists($login['language'], $this->settings->idioms))
+                {
+                    $this->session->language = $login['language'];
+                }
+                return TRUE;
+            }
 
-        $this->form_validation->set_message('_check_login', lang('users error invalid_login'));
+            $this->form_validation->set_message('_check_login', lang('users error invalid_login'));
+            return FALSE;
+        }
+        $this->form_validation->set_message('_check_login', sprintf(lang('users error too_many_login_attempts'), $this->config->item('login_max_time')));
         return FALSE;
     }
 

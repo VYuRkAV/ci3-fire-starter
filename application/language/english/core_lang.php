@@ -22,6 +22,7 @@ $lang['core button toggle_nav']          	= "Toggle navigation";
 $lang['core text no']                    	= "No";
 $lang['core text yes']                   	= "Yes";
 $lang['core text page_rendered']            = "Page rendered in <strong>{elapsed_time}</strong> seconds";
+$lang['core text copyright']             	= '© %s Powered by <a href="%s">%s</a>.';
 
 // Emails
 $lang['core email start']                	= "<!DOCTYPE html><html><head><style>
